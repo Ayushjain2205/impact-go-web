@@ -267,11 +267,17 @@ export const HomePage: React.FC = () => {
     }
   };
 
+  // Filter issues based on active filter
+  const filteredIssues =
+    activeFilter === "All"
+      ? issues
+      : issues.filter((issue) => issue.type === activeFilter);
+
   return (
     <div className="h-screen w-full relative font-sans overflow-hidden">
       {/* Full Screen Map */}
       <div className="absolute inset-0 z-0">
-        <Map issues={issues} onIssueClick={handleIssueClick} />
+        <Map issues={filteredIssues} onIssueClick={handleIssueClick} />
       </div>
 
       {/* Top Navigation Bar - Floating Overlay */}

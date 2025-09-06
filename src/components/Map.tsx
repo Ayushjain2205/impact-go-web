@@ -272,7 +272,7 @@ export const Map: React.FC<MapProps> = ({ issues = [], onIssueClick }) => {
         ];
 
       newIssues.push({
-        id: i + 1,
+        id: 1000 + i + 1, // Use IDs starting from 1000 to avoid conflicts with submitted issues
         type: randomType.type,
         lat: centerLat + latOffset,
         lng: centerLng + lngOffset,
