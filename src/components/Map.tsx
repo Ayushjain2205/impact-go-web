@@ -134,13 +134,7 @@ interface Issue {
 }
 
 interface MapProps {
-  issues?: Array<{
-    id: number;
-    type: string;
-    lat: number;
-    lng: number;
-    icon: string;
-  }>;
+  issues?: Array<Issue>;
   onIssueClick?: (issue: Issue) => void;
 }
 
