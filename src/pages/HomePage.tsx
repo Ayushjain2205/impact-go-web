@@ -97,7 +97,39 @@ export const HomePage: React.FC = () => {
 
       {/* Current Location Button - Floating Overlay */}
       <div className="absolute bottom-24 right-4 z-20">
-        <button className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-105 hover:shadow-xl text-blue-500">
+        <button
+          className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-105 hover:shadow-xl text-blue-500"
+          onClick={() => {
+            // Get the map instance from window
+            const mapInstance = (window as any).leafletMap;
+
+            if (mapInstance) {
+              // Get user's current location and recenter
+              if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                  (position) => {
+                    const { latitude, longitude } = position.coords;
+                    mapInstance.setView([latitude, longitude], 15);
+                  },
+                  (error) => {
+                    console.error(
+                      "Error getting location for recenter:",
+                      error
+                    );
+                    // Fallback to default location
+                    mapInstance.setView([37.7749, -122.4194], 15);
+                  }
+                );
+              } else {
+                // Fallback to default location
+                mapInstance.setView([37.7749, -122.4194], 15);
+              }
+            } else {
+              console.error("Map instance not found");
+            }
+          }}
+          title="Center on my location"
+        >
           <svg
             width="20"
             height="20"

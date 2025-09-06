@@ -1,16 +1,75 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 
-// Fix for default markers in react-leaflet
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
-  iconUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
-  shadowUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
+// Create custom markers for different issue types
+const createIssueIcon = (type: string, icon: string) => {
+  const getMarkerColor = (issueType: string) => {
+    switch (issueType) {
+      case "Waste":
+        return "#3ddc84"; // Green
+      case "Potholes":
+        return "#ff6b6b"; // Red
+      case "Lights":
+        return "#4ecdc4"; // Teal
+      case "Safety":
+        return "#ffc300"; // Yellow
+      default:
+        return "#6c757d"; // Gray
+    }
+  };
+
+  const color = getMarkerColor(type);
+
+  return L.divIcon({
+    className: "custom-issue-marker",
+    html: `
+      <div style="
+        background: ${color};
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        border: 3px solid white;
+        transition: all 0.2s ease;
+        cursor: pointer;
+      ">
+        ${icon}
+      </div>
+    `,
+    iconSize: [36, 36],
+    iconAnchor: [18, 18],
+    popupAnchor: [0, -18],
+  });
+};
+
+// User location marker
+const userLocationIcon = L.divIcon({
+  className: "user-location-marker",
+  html: `
+    <div style="
+      background: #3ddc84;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 6px 20px rgba(61, 220, 132, 0.4);
+      border: 4px solid white;
+      animation: pulse 2s infinite;
+    ">
+      📍
+    </div>
+  `,
+  iconSize: [50, 50],
+  iconAnchor: [25, 25],
+  popupAnchor: [0, -25],
 });
 
 interface MapProps {
@@ -31,6 +90,11 @@ const MapCenter: React.FC<{ center: [number, number] }> = ({ center }) => {
     map.setView(center, 15);
   }, [map, center]);
 
+  // Expose map instance to window for external access
+  useEffect(() => {
+    (window as any).leafletMap = map;
+  }, [map]);
+
   return null;
 };
 
@@ -40,9 +104,53 @@ export const Map: React.FC<MapProps> = ({ issues = [] }) => {
   );
   const [locationError, setLocationError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [generatedIssues, setGeneratedIssues] = useState<
+    Array<{
+      id: number;
+      type: string;
+      lat: number;
+      lng: number;
+      icon: string;
+    }>
+  >([]);
+  const issuesGenerated = useRef(false);
 
   // Default location (San Francisco) as fallback
   const defaultLocation: [number, number] = [37.7749, -122.4194];
+
+  // Generate random issues near a location
+  const generateRandomIssues = (
+    centerLat: number,
+    centerLng: number,
+    count: number = 8
+  ) => {
+    const issueTypes = [
+      { type: "Waste", icon: "🗑️" },
+      { type: "Potholes", icon: "🚧" },
+      { type: "Lights", icon: "💡" },
+      { type: "Safety", icon: "⚠️" },
+    ];
+
+    const newIssues = [];
+    for (let i = 0; i < count; i++) {
+      // Generate random offset within ~500m radius
+      const latOffset = (Math.random() - 0.5) * 0.01; // ~500m
+      const lngOffset = (Math.random() - 0.5) * 0.01; // ~500m
+
+      const randomType =
+        issueTypes[Math.floor(Math.random() * issueTypes.length)];
+
+      newIssues.push({
+        id: i + 1,
+        type: randomType.type,
+        lat: centerLat + latOffset,
+        lng: centerLng + lngOffset,
+        icon: randomType.icon,
+      });
+    }
+
+    return newIssues;
+  };
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -50,12 +158,27 @@ export const Map: React.FC<MapProps> = ({ issues = [] }) => {
         (position) => {
           const { latitude, longitude } = position.coords;
           setUserLocation([latitude, longitude]);
+          // Generate random issues only once when location is first obtained
+          if (!issuesGenerated.current) {
+            const newIssues = generateRandomIssues(latitude, longitude);
+            setGeneratedIssues(newIssues);
+            issuesGenerated.current = true;
+          }
           setIsLoading(false);
         },
         (error) => {
           console.error("Error getting location:", error);
           setLocationError(error.message);
           setUserLocation(defaultLocation);
+          // Generate random issues for fallback location too
+          if (!issuesGenerated.current) {
+            const newIssues = generateRandomIssues(
+              defaultLocation[0],
+              defaultLocation[1]
+            );
+            setGeneratedIssues(newIssues);
+            issuesGenerated.current = true;
+          }
           setIsLoading(false);
         },
         {
@@ -68,6 +191,15 @@ export const Map: React.FC<MapProps> = ({ issues = [] }) => {
       console.error("Geolocation is not supported by this browser.");
       setLocationError("Geolocation is not supported");
       setUserLocation(defaultLocation);
+      // Generate random issues for fallback location
+      if (!issuesGenerated.current) {
+        const newIssues = generateRandomIssues(
+          defaultLocation[0],
+          defaultLocation[1]
+        );
+        setGeneratedIssues(newIssues);
+        issuesGenerated.current = true;
+      }
       setIsLoading(false);
     }
   }, []);
@@ -115,10 +247,14 @@ export const Map: React.FC<MapProps> = ({ issues = [] }) => {
           </Marker>
         )}
 
-        {/* Issue markers */}
-        {issues.map((issue) => (
-          <Marker key={issue.id} position={[issue.lat, issue.lng]}>
-            <Popup>
+        {/* Issue markers - use generated issues */}
+        {generatedIssues.map((issue) => (
+          <Marker
+            key={issue.id}
+            position={[issue.lat, issue.lng]}
+            icon={createIssueIcon(issue.type, issue.icon)}
+          >
+            <Popup className="custom-popup">
               <div className="text-center">
                 <span className="text-2xl mb-2 block">{issue.icon}</span>
                 <p className="font-semibold">{issue.type}</p>

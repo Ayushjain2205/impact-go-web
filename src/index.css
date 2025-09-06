@@ -152,3 +152,31 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
 }
+
+/* Custom issue markers */
+.custom-issue-marker:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+.custom-issue-marker {
+  transition: all 0.2s ease;
+}
+
+/* User location marker animation */
+.user-location-marker {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 6px 20px rgba(61, 220, 132, 0.4);
+  }
+  50% {
+    box-shadow: 0 6px 20px rgba(61, 220, 132, 0.8),
+      0 0 0 10px rgba(61, 220, 132, 0.1);
+  }
+  100% {
+    box-shadow: 0 6px 20px rgba(61, 220, 132, 0.4);
+  }
+}
