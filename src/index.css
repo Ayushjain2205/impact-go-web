@@ -110,3 +110,45 @@ body {
 .animate-splash-bounce {
   animation: splash-bounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
+
+/* Map styling - better colors for theme */
+.map-tiles {
+  filter: hue-rotate(-10deg) saturate(0.8) contrast(1.1) brightness(1.05);
+}
+
+/* Map container styling */
+.leaflet-container {
+  background: #f0fdf4;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+}
+
+.leaflet-control-zoom a {
+  background: white;
+  border: 1px solid #3ddc84;
+  color: #3ddc84;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.leaflet-control-zoom a:hover {
+  background: #3ddc84;
+  color: white;
+}
+
+.leaflet-control-attribution {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-radius: 6px;
+  font-size: 11px;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+}
+
+/* Hide scrollbar for filter pills */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
