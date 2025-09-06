@@ -52,24 +52,70 @@ const userLocationIcon = L.divIcon({
   className: "user-location-marker",
   html: `
     <div style="
-      background: #3ddc84;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
-      box-shadow: 0 6px 20px rgba(61, 220, 132, 0.4);
-      border: 4px solid white;
-      animation: pulse 2s infinite;
     ">
-      📍
+      <!-- Outer pulsing ring -->
+      <div style="
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        background: rgba(59, 130, 246, 0.2);
+        border-radius: 50%;
+        animation: pulse-ring 2s infinite;
+      "></div>
+      
+      <!-- Middle ring -->
+      <div style="
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        background: rgba(59, 130, 246, 0.3);
+        border-radius: 50%;
+        animation: pulse-ring 2s infinite 0.5s;
+      "></div>
+      
+      <!-- Main marker -->
+      <div style="
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        border: 3px solid white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 16px rgba(59, 130, 246, 0.5);
+        position: relative;
+        z-index: 10;
+      ">
+        <!-- Inner dot -->
+        <div style="
+          width: 12px;
+          height: 12px;
+          background: white;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        ">
+          <div style="
+            width: 6px;
+            height: 6px;
+            background: #3b82f6;
+            border-radius: 50%;
+          "></div>
+        </div>
+      </div>
     </div>
   `,
-  iconSize: [50, 50],
-  iconAnchor: [25, 25],
-  popupAnchor: [0, -25],
+  iconSize: [60, 60],
+  iconAnchor: [30, 30],
+  popupAnchor: [0, -30],
 });
 
 interface Issue {
@@ -307,7 +353,7 @@ export const Map: React.FC<MapProps> = ({ issues = [], onIssueClick }) => {
     return (
       <div className="flex-1 flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-impact-green mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-impact-green)] mx-auto mb-4"></div>
           <p className="text-gray-600">Getting your location...</p>
         </div>
       </div>
@@ -334,20 +380,11 @@ export const Map: React.FC<MapProps> = ({ issues = [], onIssueClick }) => {
 
         {/* User location marker */}
         {userLocation && (
-          <Marker position={userLocation}>
-            <Popup>
-              <div className="text-center">
-                <p className="font-semibold text-impact-green">Your Location</p>
-                <p className="text-sm text-gray-600">
-                  {userLocation[0].toFixed(6)}, {userLocation[1].toFixed(6)}
-                </p>
-              </div>
-            </Popup>
-          </Marker>
+          <Marker position={userLocation} icon={userLocationIcon} />
         )}
 
-        {/* Issue markers - use generated issues */}
-        {generatedIssues.map((issue) => (
+        {/* Issue markers - combine generated and submitted issues */}
+        {[...generatedIssues, ...issues].map((issue) => (
           <Marker
             key={issue.id}
             position={[issue.lat, issue.lng]}

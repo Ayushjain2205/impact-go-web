@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Map } from "../components/Map";
 import { BottomSheet } from "../components/BottomSheet";
+import { ReportBottomSheet } from "../components/ReportBottomSheet";
+import { CategorySelectionBottomSheet } from "../components/CategorySelectionBottomSheet";
+import { SuccessToast } from "../components/SuccessToast";
 
 interface Issue {
   id: number;
@@ -21,6 +24,84 @@ export const HomePage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState("All");
   const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [isReportBottomSheetOpen, setIsReportBottomSheetOpen] = useState(false);
+  const [isCategorySelectionOpen, setIsCategorySelectionOpen] = useState(false);
+  const [capturedPhoto, setCapturedPhoto] = useState<string>("");
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [successReward, setSuccessReward] = useState(0);
+  const [issues, setIssues] = useState<Issue[]>([
+    {
+      id: 1,
+      type: "Waste",
+      lat: 37.7849,
+      lng: -122.4094,
+      icon: "🗑️",
+      title: "Garbage Pile",
+      description: "Large pile of garbage on the street",
+      reportedBy: "User123",
+      timeAgo: "2h ago",
+      status: "PENDING",
+      impact: 75,
+      image: "",
+    },
+    {
+      id: 2,
+      type: "Potholes",
+      lat: 37.7649,
+      lng: -122.4294,
+      icon: "🚧",
+      title: "Deep Pothole",
+      description: "Dangerous pothole on main road",
+      reportedBy: "User456",
+      timeAgo: "1h ago",
+      status: "IN_PROGRESS",
+      impact: 50,
+      image: "",
+    },
+    {
+      id: 3,
+      type: "Lights",
+      lat: 37.7549,
+      lng: -122.4394,
+      icon: "💡",
+      title: "Broken Street Light",
+      description: "Street light not working at night",
+      reportedBy: "User789",
+      timeAgo: "3h ago",
+      status: "PENDING",
+      impact: 40,
+      image: "",
+    },
+    {
+      id: 4,
+      type: "Safety",
+      lat: 37.7449,
+      lng: -122.4494,
+      icon: "⚠️",
+      title: "Safety Hazard",
+      description: "Broken glass on sidewalk",
+      reportedBy: "User101",
+      timeAgo: "30m ago",
+      status: "PENDING",
+      impact: 60,
+      image: "",
+    },
+    {
+      id: 5,
+      type: "Waste",
+      lat: 37.7349,
+      lng: -122.4594,
+      icon: "🚮",
+      title: "Overflowing Bin",
+      description: "Trash bin overflowing",
+      reportedBy: "User202",
+      timeAgo: "45m ago",
+      status: "RESOLVED",
+      impact: 75,
+      image: "",
+    },
+  ]);
 
   const filters = [
     { id: "All", icon: "⚡", label: "All" },
@@ -28,14 +109,6 @@ export const HomePage: React.FC = () => {
     { id: "Waste", icon: "🗑️", label: "Waste" },
     { id: "Lights", icon: "💡", label: "Lights" },
     { id: "Safety", icon: "⚠️", label: "Safety" },
-  ];
-
-  const issues = [
-    { id: 1, type: "Waste", lat: 37.7849, lng: -122.4094, icon: "🗑️" },
-    { id: 2, type: "Potholes", lat: 37.7649, lng: -122.4294, icon: "🚧" },
-    { id: 3, type: "Lights", lat: 37.7549, lng: -122.4394, icon: "💡" },
-    { id: 4, type: "Safety", lat: 37.7449, lng: -122.4494, icon: "⚠️" },
-    { id: 5, type: "Waste", lat: 37.7349, lng: -122.4594, icon: "🚮" },
   ];
 
   const handleIssueClick = (issue: Issue) => {
@@ -46,6 +119,151 @@ export const HomePage: React.FC = () => {
   const handleCloseBottomSheet = () => {
     setIsBottomSheetOpen(false);
     setSelectedIssue(null);
+  };
+
+  const handleOpenReportBottomSheet = () => {
+    setIsReportBottomSheetOpen(true);
+  };
+
+  const handleCloseReportBottomSheet = () => {
+    setIsReportBottomSheetOpen(false);
+  };
+
+  const handlePhotoTaken = (photoDataUrl: string) => {
+    setCapturedPhoto(photoDataUrl);
+    setIsReportBottomSheetOpen(false);
+    setIsCategorySelectionOpen(true);
+  };
+
+  const handleRetakePhoto = () => {
+    setIsCategorySelectionOpen(false);
+    setIsReportBottomSheetOpen(true);
+  };
+
+  const handleCategorySelect = (category: string) => {
+    console.log("Category selected:", category);
+
+    // Get current location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+
+          // Create new issue
+          const newIssue: Issue = {
+            id: Date.now(), // Simple unique ID
+            type: category,
+            lat: latitude,
+            lng: longitude,
+            icon: getIconForType(category),
+            title: getTitleForType(category),
+            description: `New ${category.toLowerCase()} issue reported`,
+            reportedBy: "You",
+            timeAgo: "Just now",
+            status: "PENDING",
+            impact: getRewardForType(category),
+            image: capturedPhoto,
+          };
+
+          // Add to issues array
+          setIssues((prevIssues) => [newIssue, ...prevIssues]);
+
+          // Close bottom sheets
+          setIsCategorySelectionOpen(false);
+          setCapturedPhoto("");
+
+          // Show success toast
+          setSuccessMessage(
+            `Your ${category.toLowerCase()} issue has been reported!`
+          );
+          setSuccessReward(newIssue.impact);
+          setShowSuccessToast(true);
+
+          console.log("Issue reported successfully:", newIssue);
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          // Fallback to default location
+          addIssueWithDefaultLocation(category);
+        }
+      );
+    } else {
+      // Fallback to default location
+      addIssueWithDefaultLocation(category);
+    }
+  };
+
+  const addIssueWithDefaultLocation = (category: string) => {
+    const newIssue: Issue = {
+      id: Date.now(),
+      type: category,
+      lat: 37.7749, // Default SF location
+      lng: -122.4194,
+      icon: getIconForType(category),
+      title: getTitleForType(category),
+      description: `New ${category.toLowerCase()} issue reported`,
+      reportedBy: "You",
+      timeAgo: "Just now",
+      status: "PENDING",
+      impact: getRewardForType(category),
+      image: capturedPhoto,
+    };
+
+    setIssues((prevIssues) => [newIssue, ...prevIssues]);
+    setIsCategorySelectionOpen(false);
+    setCapturedPhoto("");
+
+    // Show success toast
+    setSuccessMessage(
+      `Your ${category.toLowerCase()} issue has been reported!`
+    );
+    setSuccessReward(newIssue.impact);
+    setShowSuccessToast(true);
+  };
+
+  const getIconForType = (type: string): string => {
+    switch (type) {
+      case "Potholes":
+        return "🚧";
+      case "Waste":
+        return "🗑️";
+      case "Lights":
+        return "💡";
+      case "Safety":
+        return "⚠️";
+      default:
+        return "❓";
+    }
+  };
+
+  const getTitleForType = (type: string): string => {
+    switch (type) {
+      case "Potholes":
+        return "Pothole Report";
+      case "Waste":
+        return "Waste Issue";
+      case "Lights":
+        return "Street Light Problem";
+      case "Safety":
+        return "Safety Hazard";
+      default:
+        return "Issue Report";
+    }
+  };
+
+  const getRewardForType = (type: string): number => {
+    switch (type) {
+      case "Potholes":
+        return 50;
+      case "Waste":
+        return 75;
+      case "Lights":
+        return 40;
+      case "Safety":
+        return 60;
+      default:
+        return 50;
+    }
   };
 
   return (
@@ -67,7 +285,7 @@ export const HomePage: React.FC = () => {
           </button>
 
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-impact-green rounded-full flex items-center justify-center">
+            <div className="w-8 h-8 bg-[var(--color-impact-green)] rounded-full flex items-center justify-center">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path
                   d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"
@@ -82,7 +300,7 @@ export const HomePage: React.FC = () => {
             <span className="text-lg font-bold text-gray-800">IMPACT GO</span>
           </div>
 
-          <div className="flex items-center gap-1.5 bg-impact-green px-3 py-2 rounded-full text-white">
+          <div className="flex items-center gap-1.5 bg-[var(--color-impact-green)] px-3 py-2 rounded-full text-white">
             <div className="text-base">🪙</div>
             <span className="text-sm font-semibold">1,247</span>
           </div>
@@ -108,7 +326,7 @@ export const HomePage: React.FC = () => {
                 key={filter.id}
                 className={`flex items-center gap-2 px-2.5 py-1 rounded-full font-medium text-sm transition-all whitespace-nowrap flex-shrink-0 ${
                   isActive
-                    ? "bg-impact-green text-white shadow-lg"
+                    ? "bg-[var(--color-impact-green)] text-white shadow-lg"
                     : "bg-white text-gray-600 hover:bg-gray-50 shadow-lg"
                 }`}
                 onClick={() => setActiveFilter(filter.id)}
@@ -174,7 +392,10 @@ export const HomePage: React.FC = () => {
 
       {/* Report Issue Button - Floating Overlay */}
       <div className="absolute bottom-4 right-4 z-20">
-        <button className="flex items-center gap-2 py-3 px-4 bg-impact-green text-white rounded-2xl text-sm font-semibold shadow-lg transition-all hover:bg-impact-green-dark hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0">
+        <button
+          onClick={handleOpenReportBottomSheet}
+          className="flex items-center gap-2 py-3 px-4 bg-[var(--color-impact-green)] text-white rounded-2xl text-sm font-semibold shadow-lg transition-all hover:bg-[var(--color-impact-green-dark)] hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0"
+        >
           <span className="text-lg">📷</span>
           <span className="text-sm font-semibold">Report Issue </span>
         </button>
@@ -185,6 +406,30 @@ export const HomePage: React.FC = () => {
         issue={selectedIssue}
         isOpen={isBottomSheetOpen}
         onClose={handleCloseBottomSheet}
+      />
+
+      {/* Report Bottom Sheet */}
+      <ReportBottomSheet
+        isOpen={isReportBottomSheetOpen}
+        onClose={handleCloseReportBottomSheet}
+        onPhotoTaken={handlePhotoTaken}
+      />
+
+      {/* Category Selection Bottom Sheet */}
+      <CategorySelectionBottomSheet
+        isOpen={isCategorySelectionOpen}
+        onClose={() => setIsCategorySelectionOpen(false)}
+        photoDataUrl={capturedPhoto}
+        onCategorySelect={handleCategorySelect}
+        onRetakePhoto={handleRetakePhoto}
+      />
+
+      {/* Success Toast */}
+      <SuccessToast
+        isVisible={showSuccessToast}
+        onClose={() => setShowSuccessToast(false)}
+        message={successMessage}
+        reward={successReward}
       />
     </div>
   );

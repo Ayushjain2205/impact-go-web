@@ -58,7 +58,7 @@ export const ProfilePage: React.FC = () => {
         </button>
       </div>
       {disconnectLoading && (
-        <div className="text-impact-green">Disconnecting...</div>
+        <div className="text-[var(--color-impact-green)]">Disconnecting...</div>
       )}
       {disconnectError && (
         <div className="text-red-500">{disconnectError.message}</div>
@@ -83,7 +83,7 @@ export const ProfilePage: React.FC = () => {
       ></div>
       <div className="text-center relative z-10 w-full max-w-xs">
         <div className="mb-6">
-          <div className="w-16 h-16 bg-impact-green rounded-full flex items-center justify-center mx-auto shadow-lg">
+          <div className="w-16 h-16 bg-[var(--color-impact-green)] rounded-full flex items-center justify-center mx-auto shadow-lg">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
               <path
                 d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"
@@ -100,7 +100,7 @@ export const ProfilePage: React.FC = () => {
         <p className="text-gray-600 mb-8">Hunt. Report. Impact.</p>
         <button
           onClick={() => connect()}
-          className="w-full py-4 px-6 bg-impact-green text-white rounded-xl text-base font-semibold hover:bg-impact-green-dark transition-all hover:-translate-y-0.5 hover:shadow-lg"
+          className="w-full py-4 px-6 bg-[var(--color-impact-green)] text-white rounded-xl text-base font-semibold hover:bg-[var(--color-impact-green-dark)] transition-all hover:-translate-y-0.5 hover:shadow-lg"
         >
           {connectLoading ? "Connecting..." : "Get Started"}
         </button>

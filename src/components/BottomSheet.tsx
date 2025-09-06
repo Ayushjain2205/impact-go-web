@@ -137,7 +137,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
           </div>
 
           {/* Impact Button */}
-          <button className="w-full bg-impact-green text-white py-3 px-4 rounded-xl font-semibold text-base flex items-center justify-center gap-2 hover:bg-impact-green-dark transition-colors">
+          <button className="w-full bg-[var(--color-impact-green)] text-white py-3 px-4 rounded-xl font-semibold text-base flex items-center justify-center gap-2 hover:bg-[var(--color-impact-green-dark)] transition-colors">
             <span className="text-lg">🪙</span>
             <span>{issue.impact} $IMPACT</span>
           </button>
