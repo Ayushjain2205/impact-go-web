@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { ImpactCoin } from "./ImpactCoin";
 
 interface SuccessToastProps {
   isVisible: boolean;
@@ -93,7 +94,7 @@ export const SuccessToast: React.FC<SuccessToastProps> = ({
               </h3>
               <p className="text-sm text-gray-600 mb-2">{message}</p>
               <div className="flex items-center gap-2">
-                <span className="text-lg">🪙</span>
+                <ImpactCoin size="md" />
                 <span className="text-sm font-semibold text-[var(--color-impact-green)]">
                   +{reward} IMPACT earned!
                 </span>

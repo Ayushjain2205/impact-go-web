@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { ImpactCoin } from "./ImpactCoin";
 
 interface CategorySelectionBottomSheetProps {
   isOpen: boolean;
@@ -189,7 +190,7 @@ export const CategorySelectionBottomSheet: React.FC<
                         Verify
                       </button>
                       <div className="flex items-center gap-1 text-yellow-600">
-                        <span className="text-lg">🪙</span>
+                        <ImpactCoin size="sm" />
                         <span className="font-semibold">{category.reward}</span>
                       </div>
                     </div>
@@ -207,7 +208,7 @@ export const CategorySelectionBottomSheet: React.FC<
               onClick={handleSubmit}
               className="w-full bg-[var(--color-impact-green)] text-white py-4 px-6 rounded-2xl font-semibold text-base flex items-center justify-center gap-3 hover:bg-[var(--color-impact-green-dark)] transition-colors"
             >
-              <span className="text-lg">🪙</span>
+              <ImpactCoin size="md" />
               <span>Submit & Earn {selectedCategoryData?.reward} IMPACT</span>
             </button>
           </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import { ImpactCoin } from "./ImpactCoin";
 
 interface Issue {
   id: number;
@@ -138,7 +139,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
 
           {/* Impact Button */}
           <button className="w-full bg-[var(--color-impact-green)] text-white py-3 px-4 rounded-xl font-semibold text-base flex items-center justify-center gap-2 hover:bg-[var(--color-impact-green-dark)] transition-colors">
-            <span className="text-lg">🪙</span>
+            <ImpactCoin size="md" />
             <span>{issue.impact} $IMPACT</span>
           </button>
         </div>

@@ -4,6 +4,7 @@ import { BottomSheet } from "../components/BottomSheet";
 import { ReportBottomSheet } from "../components/ReportBottomSheet";
 import { CategorySelectionBottomSheet } from "../components/CategorySelectionBottomSheet";
 import { SuccessToast } from "../components/SuccessToast";
+import { ImpactCoin } from "../components/ImpactCoin";
 
 interface Issue {
   id: number;
@@ -301,7 +302,7 @@ export const HomePage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-1.5 bg-[var(--color-impact-green)] px-3 py-2 rounded-full text-white">
-            <div className="text-base">🪙</div>
+            <ImpactCoin size="sm" />
             <span className="text-sm font-semibold">1,247</span>
           </div>
         </div>
