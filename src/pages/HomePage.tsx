@@ -1,8 +1,26 @@
 import React, { useState } from "react";
 import { Map } from "../components/Map";
+import { BottomSheet } from "../components/BottomSheet";
+
+interface Issue {
+  id: number;
+  type: string;
+  lat: number;
+  lng: number;
+  icon: string;
+  title: string;
+  description: string;
+  reportedBy: string;
+  timeAgo: string;
+  status: string;
+  impact: number;
+  image: string;
+}
 
 export const HomePage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState("All");
+  const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
   const filters = [
     { id: "All", icon: "⚡", label: "All" },
@@ -20,11 +38,21 @@ export const HomePage: React.FC = () => {
     { id: 5, type: "Waste", lat: 37.7349, lng: -122.4594, icon: "🚮" },
   ];
 
+  const handleIssueClick = (issue: Issue) => {
+    setSelectedIssue(issue);
+    setIsBottomSheetOpen(true);
+  };
+
+  const handleCloseBottomSheet = () => {
+    setIsBottomSheetOpen(false);
+    setSelectedIssue(null);
+  };
+
   return (
     <div className="h-screen w-full relative font-sans overflow-hidden">
       {/* Full Screen Map */}
       <div className="absolute inset-0 z-0">
-        <Map issues={issues} />
+        <Map issues={issues} onIssueClick={handleIssueClick} />
       </div>
 
       {/* Top Navigation Bar - Floating Overlay */}
@@ -148,9 +176,16 @@ export const HomePage: React.FC = () => {
       <div className="absolute bottom-4 right-4 z-20">
         <button className="flex items-center gap-2 py-3 px-4 bg-impact-green text-white rounded-2xl text-sm font-semibold shadow-lg transition-all hover:bg-impact-green-dark hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0">
           <span className="text-lg">📷</span>
-          <span className="text-sm font-semibold">Report Issue</span>
+          <span className="text-sm font-semibold">Report Issue </span>
         </button>
       </div>
+
+      {/* Bottom Sheet */}
+      <BottomSheet
+        issue={selectedIssue}
+        isOpen={isBottomSheetOpen}
+        onClose={handleCloseBottomSheet}
+      />
     </div>
   );
 };

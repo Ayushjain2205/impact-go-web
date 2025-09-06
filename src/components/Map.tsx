@@ -72,6 +72,21 @@ const userLocationIcon = L.divIcon({
   popupAnchor: [0, -25],
 });
 
+interface Issue {
+  id: number;
+  type: string;
+  lat: number;
+  lng: number;
+  icon: string;
+  title: string;
+  description: string;
+  reportedBy: string;
+  timeAgo: string;
+  status: string;
+  impact: number;
+  image: string;
+}
+
 interface MapProps {
   issues?: Array<{
     id: number;
@@ -80,6 +95,7 @@ interface MapProps {
     lng: number;
     icon: string;
   }>;
+  onIssueClick?: (issue: Issue) => void;
 }
 
 // Component to handle map centering when location changes
@@ -98,21 +114,13 @@ const MapCenter: React.FC<{ center: [number, number] }> = ({ center }) => {
   return null;
 };
 
-export const Map: React.FC<MapProps> = ({ issues = [] }) => {
+export const Map: React.FC<MapProps> = ({ issues = [], onIssueClick }) => {
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
     null
   );
   const [locationError, setLocationError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [generatedIssues, setGeneratedIssues] = useState<
-    Array<{
-      id: number;
-      type: string;
-      lat: number;
-      lng: number;
-      icon: string;
-    }>
-  >([]);
+  const [generatedIssues, setGeneratedIssues] = useState<Issue[]>([]);
   const issuesGenerated = useRef(false);
 
   // Default location (San Francisco) as fallback
@@ -125,13 +133,90 @@ export const Map: React.FC<MapProps> = ({ issues = [] }) => {
     count: number = 8
   ) => {
     const issueTypes = [
-      { type: "Waste", icon: "🗑️" },
-      { type: "Potholes", icon: "🚧" },
-      { type: "Lights", icon: "💡" },
-      { type: "Safety", icon: "⚠️" },
+      {
+        type: "Waste",
+        icon: "🗑️",
+        titles: [
+          "Overflowing Trash",
+          "Littered Sidewalk",
+          "Dumpster Overflow",
+          "Street Cleaning Needed",
+        ],
+        descriptions: [
+          "Trash cans overflowing onto sidewalk",
+          "Litter scattered across the area",
+          "Dumpster needs immediate attention",
+          "Street requires cleaning service",
+        ],
+      },
+      {
+        type: "Potholes",
+        icon: "🚧",
+        titles: [
+          "Damaged Road",
+          "Pothole Hazard",
+          "Cracked Asphalt",
+          "Road Repair Needed",
+        ],
+        descriptions: [
+          "Large pothole creating driving hazard",
+          "Cracked road surface needs repair",
+          "Road damage affecting traffic flow",
+          "Asphalt deterioration requires attention",
+        ],
+      },
+      {
+        type: "Lights",
+        icon: "💡",
+        titles: [
+          "Street Light Out",
+          "Flickering Light",
+          "Broken Lamp Post",
+          "Dark Street",
+        ],
+        descriptions: [
+          "Street light not working properly",
+          "Flickering light needs replacement",
+          "Lamp post damaged and non-functional",
+          "Area too dark for safe walking",
+        ],
+      },
+      {
+        type: "Safety",
+        icon: "⚠️",
+        titles: [
+          "Damaged Sidewalk",
+          "Trip Hazard",
+          "Broken Guardrail",
+          "Safety Concern",
+        ],
+        descriptions: [
+          "Cracked sidewalk creating trip hazard",
+          "Uneven surface poses walking risk",
+          "Guardrail damaged and unsafe",
+          "General safety issue in the area",
+        ],
+      },
     ];
 
-    const newIssues = [];
+    const reporters = [
+      "WalkSafe",
+      "CityWatch",
+      "CommunityReporter",
+      "SafetyFirst",
+      "UrbanGuard",
+    ];
+    const timeAgoOptions = [
+      "2 hours ago",
+      "6 hours ago",
+      "1 day ago",
+      "3 days ago",
+      "1 week ago",
+    ];
+    const statusOptions = ["PENDING", "IN_PROGRESS", "REVIEWED"];
+    const impactOptions = [15, 20, 25, 30, 35, 40, 45, 50];
+
+    const newIssues: Issue[] = [];
     for (let i = 0; i < count; i++) {
       // Generate random offset within ~500m radius
       const latOffset = (Math.random() - 0.5) * 0.01; // ~500m
@@ -139,6 +224,12 @@ export const Map: React.FC<MapProps> = ({ issues = [] }) => {
 
       const randomType =
         issueTypes[Math.floor(Math.random() * issueTypes.length)];
+      const randomTitle =
+        randomType.titles[Math.floor(Math.random() * randomType.titles.length)];
+      const randomDescription =
+        randomType.descriptions[
+          Math.floor(Math.random() * randomType.descriptions.length)
+        ];
 
       newIssues.push({
         id: i + 1,
@@ -146,6 +237,14 @@ export const Map: React.FC<MapProps> = ({ issues = [] }) => {
         lat: centerLat + latOffset,
         lng: centerLng + lngOffset,
         icon: randomType.icon,
+        title: randomTitle,
+        description: randomDescription,
+        reportedBy: reporters[Math.floor(Math.random() * reporters.length)],
+        timeAgo:
+          timeAgoOptions[Math.floor(Math.random() * timeAgoOptions.length)],
+        status: statusOptions[Math.floor(Math.random() * statusOptions.length)],
+        impact: impactOptions[Math.floor(Math.random() * impactOptions.length)],
+        image: `https://picsum.photos/400/300?random=${i + 1}`, // Random placeholder images
       });
     }
 
@@ -253,15 +352,14 @@ export const Map: React.FC<MapProps> = ({ issues = [] }) => {
             key={issue.id}
             position={[issue.lat, issue.lng]}
             icon={createIssueIcon(issue.type, issue.icon)}
-          >
-            <Popup className="custom-popup">
-              <div className="text-center">
-                <span className="text-2xl mb-2 block">{issue.icon}</span>
-                <p className="font-semibold">{issue.type}</p>
-                <p className="text-sm text-gray-600">Issue #{issue.id}</p>
-              </div>
-            </Popup>
-          </Marker>
+            eventHandlers={{
+              click: () => {
+                if (onIssueClick) {
+                  onIssueClick(issue);
+                }
+              },
+            }}
+          />
         ))}
       </MapContainer>
 
