@@ -7,6 +7,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { SplashScreen } from "./components/SplashScreen";
+import { MobileOnlyWrapper } from "./components/MobileOnlyWrapper";
 import { HomePage } from "./pages/HomePage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { SquadsPage } from "./pages/SquadsPage";
@@ -20,26 +21,30 @@ function App() {
   // Show splash screen only on first load
   if (showSplash) {
     return (
-      <SplashScreen
-        onComplete={() => {
-          setShowSplash(false);
-          localStorage.setItem("splashShown", "true");
-        }}
-      />
+      <MobileOnlyWrapper>
+        <SplashScreen
+          onComplete={() => {
+            setShowSplash(false);
+            localStorage.setItem("splashShown", "true");
+          }}
+        />
+      </MobileOnlyWrapper>
     );
   }
 
   // Show routing after splash screen
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/squads" element={<SquadsPage />} />
-        <Route path="/leaderboard" element={<LeaderboardPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Router>
+    <MobileOnlyWrapper>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/squads" element={<SquadsPage />} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
+    </MobileOnlyWrapper>
   );
 }
 
