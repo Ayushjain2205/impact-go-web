@@ -5,7 +5,7 @@ import { ReportBottomSheet } from "../components/ReportBottomSheet";
 import { CategorySelectionBottomSheet } from "../components/CategorySelectionBottomSheet";
 import { SuccessToast } from "../components/SuccessToast";
 import { ImpactCoin } from "../components/ImpactCoin";
-import { Zap } from "lucide-react";
+import { Zap, Menu, X, Users, Trophy, User } from "lucide-react";
 
 interface Issue {
   id: number;
@@ -32,6 +32,7 @@ export const HomePage: React.FC = () => {
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [successReward, setSuccessReward] = useState(0);
+  const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
   const [issues, setIssues] = useState<Issue[]>([
     {
       id: 1,
@@ -121,6 +122,37 @@ export const HomePage: React.FC = () => {
   const handleCloseBottomSheet = () => {
     setIsBottomSheetOpen(false);
     setSelectedIssue(null);
+  };
+
+  const handleHamburgerMenuToggle = () => {
+    setIsHamburgerMenuOpen(!isHamburgerMenuOpen);
+  };
+
+  const handleMenuClose = () => {
+    setIsHamburgerMenuOpen(false);
+  };
+
+  const handleMenuAction = (action: string) => {
+    console.log(`Menu action: ${action}`);
+    setIsHamburgerMenuOpen(false);
+
+    // Navigation logic based on the action
+    switch (action) {
+      case "squads":
+        // Navigate to squads page
+        window.location.href = "/squads";
+        break;
+      case "leaderboard":
+        // Navigate to leaderboard page
+        window.location.href = "/leaderboard";
+        break;
+      case "profile":
+        // Navigate to profile page
+        window.location.href = "/profile";
+        break;
+      default:
+        console.log(`Unknown action: ${action}`);
+    }
   };
 
   const handleOpenReportBottomSheet = () => {
@@ -284,12 +316,11 @@ export const HomePage: React.FC = () => {
       {/* Top Navigation Bar - Floating Overlay */}
       <div className="absolute top-4 left-4 right-4 z-20">
         <div className="flex items-center justify-between px-4 py-3 bg-white rounded-2xl shadow-lg backdrop-blur-sm">
-          <button className="p-2 hover:bg-gray-50 rounded-lg transition-colors">
-            <div className="flex flex-col gap-1">
-              <span className="w-4 h-0.5 bg-gray-600 rounded-sm"></span>
-              <span className="w-4 h-0.5 bg-gray-600 rounded-sm"></span>
-              <span className="w-4 h-0.5 bg-gray-600 rounded-sm"></span>
-            </div>
+          <button
+            className="p-2 hover:bg-gray-50 rounded-lg transition-colors"
+            onClick={handleHamburgerMenuToggle}
+          >
+            <Menu size={20} className="text-gray-600" />
           </button>
 
           <div className="flex items-center gap-2">
@@ -307,6 +338,54 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Hamburger Menu */}
+      {isHamburgerMenuOpen && (
+        <div className="absolute inset-0 z-30">
+          {/* Background Overlay */}
+          <div
+            className="absolute inset-0 bg-[#00000060]"
+            onClick={handleMenuClose}
+          />
+
+          {/* Menu Panel */}
+          <div className="absolute top-20 left-4 z-40">
+            <div className="bg-white rounded-2xl shadow-xl w-48">
+              <div className="p-2">
+                <button
+                  className="w-full flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-xl transition-colors"
+                  onClick={() => handleMenuAction("squads")}
+                >
+                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Users size={16} className="text-blue-600" />
+                  </div>
+                  <span className="text-gray-800 font-medium">Squads</span>
+                </button>
+
+                <button
+                  className="w-full flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-xl transition-colors"
+                  onClick={() => handleMenuAction("leaderboard")}
+                >
+                  <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+                    <Trophy size={16} className="text-yellow-600" />
+                  </div>
+                  <span className="text-gray-800 font-medium">Leaderboard</span>
+                </button>
+
+                <button
+                  className="w-full flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-xl transition-colors"
+                  onClick={() => handleMenuAction("profile")}
+                >
+                  <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                    <User size={16} className="text-green-600" />
+                  </div>
+                  <span className="text-gray-800 font-medium">Profile</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Filter Bar - Floating Overlay */}
       <div className="absolute top-22 left-4 right-4 z-20">
