@@ -1,9 +1,7 @@
 import { useSolanaWallet } from "@web3auth/modal/react/solana";
-import {
-  LAMPORTS_PER_SOL,
-  PublicKey,
-} from "@solana/web3.js";
+import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import { useEffect, useState } from "react";
+import { RefreshCw } from "lucide-react";
 
 export function Balance() {
   const { accounts, connection } = useSolanaWallet();
@@ -32,16 +30,22 @@ export function Balance() {
   }, [connection, accounts]);
 
   return (
-    <div>
-      <h2>Balance</h2>
-      <div>
-        {balance !== null && `${balance / LAMPORTS_PER_SOL} SOL`} 
+    <div className="flex items-center gap-2">
+      <span>Balance:</span>
+      <div className="flex items-center gap-1">
+        <span>
+          {balance !== null ? `${balance / LAMPORTS_PER_SOL} SOL` : "0 SOL"}
+        </span>
+        {isLoading && <span className="text-xs">Loading...</span>}
+        {error && <span className="text-xs text-red-500">Error</span>}
+        <button
+          onClick={fetchBalance}
+          className="p-1 hover:bg-gray-100 rounded transition-colors"
+          title="Refresh balance"
+        >
+          <RefreshCw size={14} />
+        </button>
       </div>
-        {isLoading && <span className="loading">Loading...</span>}
-        {error && <span className="error">Error: {error}</span>}
-      <button onClick={fetchBalance} type="submit" className="card">
-          Fetch Balance
-      </button>
     </div>
-  )
+  );
 }
