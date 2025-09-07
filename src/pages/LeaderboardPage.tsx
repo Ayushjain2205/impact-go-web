@@ -1,42 +1,28 @@
 import React, { useState } from "react";
-import {
-  Trophy,
-  Medal,
-  Star,
-  Users,
-  Calendar,
-  TrendingUp,
-  ArrowLeft,
-} from "lucide-react";
+import { Trophy, Medal, Star, Users, ArrowLeft, Zap } from "lucide-react";
+import { ImpactCoin } from "../components/ImpactCoin";
 
 interface LeaderboardEntry {
   id: number;
   rank: number;
   name: string;
   avatar: string;
-  points: number;
-  reports: number;
-  joinDate: string;
-  isCurrentUser?: boolean;
-  badge?: string;
+  score: number;
 }
 
 interface SquadLeaderboardEntry {
   id: number;
   rank: number;
   name: string;
-  avatar: string;
-  points: number;
+  icon: string;
+  score: number;
   members: number;
-  reports: number;
-  isJoined?: boolean;
 }
 
 export const LeaderboardPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"individual" | "squads">(
     "individual"
   );
-  const [timeFilter, setTimeFilter] = useState<"all" | "month" | "week">("all");
 
   const handleBackToHome = () => {
     window.location.href = "/";
@@ -46,69 +32,82 @@ export const LeaderboardPage: React.FC = () => {
     {
       id: 1,
       rank: 1,
-      name: "Alice Johnson",
-      avatar: "👩‍💼",
-      points: 3240,
-      reports: 28,
-      joinDate: "3 months ago",
-      badge: "Eco Champion",
+      name: "EcoWarrior",
+      avatar:
+        "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face",
+      score: 3420,
     },
     {
       id: 2,
       rank: 2,
-      name: "Bob Smith",
-      avatar: "👨‍🔧",
-      points: 2890,
-      reports: 24,
-      joinDate: "2 months ago",
-      badge: "Street Hero",
+      name: "CityGuardian",
+      avatar:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
+      score: 3180,
     },
     {
       id: 3,
       rank: 3,
-      name: "Carol Davis",
-      avatar: "👩‍🚀",
-      points: 2650,
-      reports: 22,
-      joinDate: "4 months ago",
-      badge: "Safety Star",
+      name: "StreetHero",
+      avatar:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
+      score: 2950,
     },
     {
       id: 4,
       rank: 4,
-      name: "David Wilson",
-      avatar: "👨‍🌾",
-      points: 2340,
-      reports: 19,
-      joinDate: "1 month ago",
+      name: "SafetyFirst",
+      avatar:
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face",
+      score: 2750,
     },
     {
       id: 5,
       rank: 5,
-      name: "You",
-      avatar: "👤",
-      points: 1890,
-      reports: 15,
-      joinDate: "2 weeks ago",
-      isCurrentUser: true,
+      name: "CleanStreets",
+      avatar:
+        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&crop=face",
+      score: 2580,
     },
     {
       id: 6,
       rank: 6,
-      name: "Emma Brown",
-      avatar: "👩‍🎨",
-      points: 1760,
-      reports: 14,
-      joinDate: "3 weeks ago",
+      name: "RoadWarrior",
+      avatar:
+        "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=100&h=100&fit=crop&crop=face",
+      score: 2420,
     },
     {
       id: 7,
       rank: 7,
-      name: "Frank Miller",
-      avatar: "👨‍💻",
-      points: 1620,
-      reports: 13,
-      joinDate: "1 week ago",
+      name: "GreenGuardian",
+      avatar:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
+      score: 2280,
+    },
+    {
+      id: 8,
+      rank: 8,
+      name: "EcoChampion",
+      avatar:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
+      score: 2150,
+    },
+    {
+      id: 9,
+      rank: 9,
+      name: "CityCleaner",
+      avatar:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
+      score: 2020,
+    },
+    {
+      id: 10,
+      rank: 10,
+      name: "StreetSaver",
+      avatar:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
+      score: 1890,
     },
   ];
 
@@ -116,107 +115,118 @@ export const LeaderboardPage: React.FC = () => {
     {
       id: 1,
       rank: 1,
-      name: "Eco Warriors",
-      avatar: "🌱",
-      points: 12450,
-      members: 12,
-      reports: 89,
-      isJoined: true,
+      name: "Richmond Civic Alliance",
+      icon: "🏛️",
+      score: 24680,
+      members: 203,
     },
     {
       id: 2,
       rank: 2,
-      name: "Safety Squad",
-      avatar: "🛡️",
-      points: 11200,
-      members: 15,
-      reports: 76,
-      isJoined: true,
+      name: "SOMA Infrastructure",
+      icon: "🏗️",
+      score: 18750,
+      members: 156,
     },
     {
       id: 3,
       rank: 3,
-      name: "Street Fixers",
-      avatar: "🔧",
-      points: 9450,
-      members: 8,
-      reports: 63,
-      isJoined: false,
+      name: "Green Bay Guardians",
+      icon: "🌱",
+      score: 15420,
+      members: 127,
     },
     {
       id: 4,
       rank: 4,
-      name: "Green Guardians",
-      avatar: "🌿",
-      points: 7800,
-      members: 6,
-      reports: 52,
-      isJoined: false,
+      name: "Downtown Cleaners",
+      icon: "🧹",
+      score: 12300,
+      members: 98,
+    },
+    {
+      id: 5,
+      rank: 5,
+      name: "Safety First Squad",
+      icon: "🛡️",
+      score: 10890,
+      members: 85,
+    },
+    {
+      id: 6,
+      rank: 6,
+      name: "Street Warriors",
+      icon: "⚔️",
+      score: 9650,
+      members: 72,
+    },
+    {
+      id: 7,
+      rank: 7,
+      name: "Eco Defenders",
+      icon: "🌿",
+      score: 8420,
+      members: 64,
+    },
+    {
+      id: 8,
+      rank: 8,
+      name: "City Builders",
+      icon: "🔨",
+      score: 7890,
+      members: 58,
+    },
+    {
+      id: 9,
+      rank: 9,
+      name: "Green Team",
+      icon: "🌳",
+      score: 7150,
+      members: 51,
+    },
+    {
+      id: 10,
+      rank: 10,
+      name: "Community Heroes",
+      icon: "🦸",
+      score: 6820,
+      members: 47,
     },
   ];
 
-  const getRankIcon = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return <Trophy size={20} className="text-yellow-500" />;
-      case 2:
-        return <Medal size={20} className="text-gray-400" />;
-      case 3:
-        return <Medal size={20} className="text-amber-600" />;
-      default:
-        return (
-          <span className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold text-gray-600">
-            {rank}
-          </span>
-        );
-    }
+  const getRankDisplay = (rank: number) => {
+    return (
+      <span className="text-lg font-bold font-display text-gray-500">
+        #{rank}
+      </span>
+    );
   };
 
   const IndividualEntry: React.FC<{ entry: LeaderboardEntry }> = ({
     entry,
   }) => (
-    <div
-      className={`flex items-center gap-4 p-4 rounded-2xl transition-colors ${
-        entry.isCurrentUser
-          ? "bg-[var(--color-impact-green)] bg-opacity-10 border border-[var(--color-impact-green)] border-opacity-30"
-          : "bg-white hover:bg-gray-50"
-      }`}
-    >
-      <div className="flex-shrink-0">{getRankIcon(entry.rank)}</div>
+    <div className="flex items-center gap-4 p-4 bg-white rounded-2xl shadow-sm">
+      <div className="flex-shrink-0 ">{getRankDisplay(entry.rank)}</div>
 
-      <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-2xl">
-        {entry.avatar}
+      <div className="w-12 h-12 rounded-full overflow-hidden">
+        <img
+          src={entry.avatar}
+          alt={entry.name}
+          className="w-full h-full object-cover"
+        />
       </div>
 
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <h3
-            className={`font-semibold truncate ${
-              entry.isCurrentUser
-                ? "text-[var(--color-impact-green)]"
-                : "text-gray-800"
-            }`}
-          >
-            {entry.name}
-          </h3>
-          {entry.badge && (
-            <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full">
-              {entry.badge}
-            </span>
-          )}
-        </div>
-        <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
-          <span>{entry.points.toLocaleString()} pts</span>
-          <span>{entry.reports} reports</span>
-          <span>{entry.joinDate}</span>
-        </div>
+        <h3 className="font-bold font-display text-black truncate">
+          {entry.name}
+        </h3>
       </div>
 
-      <div className="text-right">
-        <div className="text-2xl font-bold text-gray-800">
-          {entry.points.toLocaleString()}
-        </div>
-        <div className="text-xs text-gray-500">points</div>
+      <div className="flex items-center gap-1">
+        <ImpactCoin size="sm" />
+        <span className="text-green-600 font-bold font-display">
+          {entry.score.toLocaleString()}
+        </span>
       </div>
     </div>
   );
@@ -224,141 +234,78 @@ export const LeaderboardPage: React.FC = () => {
   const SquadEntry: React.FC<{ entry: SquadLeaderboardEntry }> = ({
     entry,
   }) => (
-    <div
-      className={`flex items-center gap-4 p-4 rounded-2xl transition-colors ${
-        entry.isJoined
-          ? "bg-[var(--color-impact-green)] bg-opacity-10 border border-[var(--color-impact-green)] border-opacity-30"
-          : "bg-white hover:bg-gray-50"
-      }`}
-    >
-      <div className="flex-shrink-0">{getRankIcon(entry.rank)}</div>
+    <div className="flex items-center gap-4 p-4 bg-white rounded-2xl shadow-sm">
+      <div className="flex-shrink-0">{getRankDisplay(entry.rank)}</div>
 
-      <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-2xl">
-        {entry.avatar}
+      <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-2xl">
+        {entry.icon}
       </div>
 
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <h3
-            className={`font-semibold truncate ${
-              entry.isJoined
-                ? "text-[var(--color-impact-green)]"
-                : "text-gray-800"
-            }`}
-          >
-            {entry.name}
-          </h3>
-          {entry.isJoined && (
-            <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
-              Joined
-            </span>
-          )}
-        </div>
-        <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
-          <span>{entry.members} members</span>
-          <span>{entry.reports} reports</span>
+        <h3 className="font-bold font-display text-black truncate">
+          {entry.name}
+        </h3>
+        <div className="flex items-center gap-1 mt-1">
+          <Users size={12} className="text-gray-400" />
+          <span className="text-sm text-gray-500 font-display">
+            {entry.members} members
+          </span>
         </div>
       </div>
 
-      <div className="text-right">
-        <div className="text-2xl font-bold text-gray-800">
-          {entry.points.toLocaleString()}
-        </div>
-        <div className="text-xs text-gray-500">points</div>
+      <div className="flex items-center gap-1">
+        <ImpactCoin size="sm" />
+        <span className="text-green-600 font-bold font-display">
+          {entry.score.toLocaleString()}
+        </span>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 py-4">
+      <div className="bg-white px-4 py-4">
         <div className="flex items-center gap-3">
           <button
             onClick={handleBackToHome}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
           >
-            <ArrowLeft size={20} className="text-gray-600" />
+            <ArrowLeft size={20} className="text-black" />
           </button>
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold text-gray-800">Leaderboard</h1>
-            <p className="text-sm text-gray-600">
-              Top performers making an impact
-            </p>
+          <div className="flex-1 flex items-center justify-center gap-2">
+            <div className="w-8 h-8 bg-[var(--color-impact-green)] rounded-full flex items-center justify-center">
+              <Zap width={20} height={20} color="white" />
+            </div>
+            <h1 className="text-xl font-bold font-display text-black">
+              Leaderboard
+            </h1>
           </div>
-          <div className="flex items-center gap-2">
-            <TrendingUp
-              size={20}
-              className="text-[var(--color-impact-green)]"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Time Filter */}
-      <div className="px-4 py-4">
-        <div className="flex gap-2 bg-gray-100 p-1 rounded-xl">
-          <button
-            className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
-              timeFilter === "all"
-                ? "bg-white text-gray-800 shadow-sm"
-                : "text-gray-600"
-            }`}
-            onClick={() => setTimeFilter("all")}
-          >
-            All Time
-          </button>
-          <button
-            className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
-              timeFilter === "month"
-                ? "bg-white text-gray-800 shadow-sm"
-                : "text-gray-600"
-            }`}
-            onClick={() => setTimeFilter("month")}
-          >
-            This Month
-          </button>
-          <button
-            className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
-              timeFilter === "week"
-                ? "bg-white text-gray-800 shadow-sm"
-                : "text-gray-600"
-            }`}
-            onClick={() => setTimeFilter("week")}
-          >
-            This Week
-          </button>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="px-4 pb-4">
-        <div className="flex gap-2 bg-gray-100 p-1 rounded-xl">
+      <div className="px-4 py-4">
+        <div className="flex gap-1 bg-white p-1 rounded-xl">
           <button
-            className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
+            className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-colors ${
               activeTab === "individual"
-                ? "bg-white text-gray-800 shadow-sm"
-                : "text-gray-600"
+                ? "bg-green-500 text-white"
+                : "text-gray-600 bg-white"
             }`}
             onClick={() => setActiveTab("individual")}
           >
-            <div className="flex items-center justify-center gap-2">
-              <Users size={16} />
-              <span>Individuals</span>
-            </div>
+            <span className="font-display">Top Hunters</span>
           </button>
           <button
-            className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
+            className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-colors ${
               activeTab === "squads"
-                ? "bg-white text-gray-800 shadow-sm"
-                : "text-gray-600"
+                ? "bg-green-500 text-white"
+                : "text-gray-600 bg-white"
             }`}
             onClick={() => setActiveTab("squads")}
           >
-            <div className="flex items-center justify-center gap-2">
-              <Trophy size={16} />
-              <span>Squads</span>
-            </div>
+            <span className="font-display">Top Squads</span>
           </button>
         </div>
       </div>
