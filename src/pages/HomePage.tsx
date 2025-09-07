@@ -5,6 +5,7 @@ import { ReportBottomSheet } from "../components/ReportBottomSheet";
 import { CategorySelectionBottomSheet } from "../components/CategorySelectionBottomSheet";
 import { SuccessToast } from "../components/SuccessToast";
 import { ImpactCoin } from "../components/ImpactCoin";
+import { Zap } from "lucide-react";
 
 interface Issue {
   id: number;
@@ -293,18 +294,11 @@ export const HomePage: React.FC = () => {
 
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-[var(--color-impact-green)] rounded-full flex items-center justify-center">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"
-                  fill="white"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <Zap width={20} height={20} color="white" />
             </div>
-            <span className="text-lg font-bold text-gray-800">IMPACT GO</span>
+            <span className="text-lg font-bold font-display text-gray-800">
+              IMPACT GO
+            </span>
           </div>
 
           <div className="flex items-center gap-1.5 bg-[var(--color-impact-green)] px-3 py-2 rounded-full text-white">

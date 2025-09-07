@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Zap } from "lucide-react";
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -105,22 +106,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
               }}
             >
               {/* Lightning bolt icon */}
-              <svg
-                width="48"
-                height="48"
-                viewBox="0 0 24 24"
-                fill="none"
-                className="text-white"
-              >
-                <path
-                  d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"
-                  fill="currentColor"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <Zap width={48} height={48} color="white" />
             </div>
           </div>
         </div>
