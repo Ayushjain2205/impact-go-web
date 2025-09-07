@@ -1,11 +1,17 @@
 import React, { useState } from "react";
+import {
+  useWeb3AuthConnect,
+  useWeb3AuthDisconnect,
+  useWeb3AuthUser,
+} from "@web3auth/modal/react";
+import { useSolanaWallet } from "@web3auth/modal/react/solana";
 import { Map } from "../components/Map";
 import { BottomSheet } from "../components/BottomSheet";
 import { ReportBottomSheet } from "../components/ReportBottomSheet";
 import { CategorySelectionBottomSheet } from "../components/CategorySelectionBottomSheet";
 import { SuccessToast } from "../components/SuccessToast";
 import { ImpactCoin } from "../components/ImpactCoin";
-import { Zap, Menu, X, Users, Trophy, User } from "lucide-react";
+import { Zap, Menu, X, Users, Trophy, User, Loader2 } from "lucide-react";
 
 interface Issue {
   id: number;
@@ -23,6 +29,21 @@ interface Issue {
 }
 
 export const HomePage: React.FC = () => {
+  const {
+    connect,
+    isConnected,
+    connectorName,
+    loading: connectLoading,
+    error: connectError,
+  } = useWeb3AuthConnect();
+  const {
+    disconnect,
+    loading: disconnectLoading,
+    error: disconnectError,
+  } = useWeb3AuthDisconnect();
+  const { userInfo } = useWeb3AuthUser();
+  const { accounts } = useSolanaWallet();
+
   const [activeFilter, setActiveFilter] = useState("All");
   const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -305,6 +326,47 @@ export const HomePage: React.FC = () => {
     activeFilter === "All"
       ? issues
       : issues.filter((issue) => issue.type === activeFilter);
+
+  // Login view for unconnected state
+  const unloggedInView = (
+    <div className="min-h-screen flex flex-col items-center justify-center p-5 relative">
+      {/* Main gradient background */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 50%, #3DDC84 100%)",
+        }}
+      />
+      <div className="text-center relative z-10 w-full max-w-xs">
+        <div className="mb-6">
+          <div className="w-16 h-16 bg-[var(--color-impact-green)] rounded-full flex items-center justify-center mx-auto shadow-lg">
+            <Zap width={32} height={32} color="white" />
+          </div>
+        </div>
+        <h1 className="text-3xl font-bold font-display text-gray-800 mb-2">
+          IMPACT GO
+        </h1>
+        <p className="text-gray-600 mb-8">Hunt. Report. Impact.</p>
+        <button
+          onClick={() => connect()}
+          className="w-full py-4 px-6 bg-[var(--color-impact-green)] text-white rounded-xl text-base font-semibold hover:bg-[var(--color-impact-green-dark)] transition-all hover:-translate-y-0.5 hover:shadow-lg"
+        >
+          {connectLoading ? "Connecting..." : "Get Started"}
+        </button>
+        {connectError && (
+          <div className="text-red-500 text-sm mt-4">
+            {connectError.message}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  // Show login screen if not connected
+  if (!isConnected) {
+    return unloggedInView;
+  }
 
   return (
     <div className="h-screen w-full relative font-sans overflow-hidden">
