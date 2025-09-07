@@ -17,7 +17,6 @@ import {
   Coins,
   ExternalLink,
   RefreshCw,
-  Loader2,
 } from "lucide-react";
 import { SignTransaction } from "../components/signTransaction";
 import { Balance } from "../components/getBalance";
@@ -250,52 +249,7 @@ export const ProfilePage: React.FC = () => {
     </div>
   );
 
-  // Loader component for connecting state
-  const loaderView = (
-    <div className="min-h-screen flex flex-col items-center justify-center p-5 relative">
-      {/* Main gradient background */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 50%, #3DDC84 100%)",
-        }}
-      />
-      <div className="text-center relative z-10 w-full max-w-xs">
-        <div className="mb-6">
-          <div className="w-16 h-16 bg-[var(--color-impact-green)] rounded-full flex items-center justify-center mx-auto shadow-lg">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"
-                fill="white"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
-        </div>
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">IMPACT GO</h1>
-        <p className="text-gray-600 mb-8">Hunt. Report. Impact.</p>
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="w-8 h-8 text-[var(--color-impact-green)] animate-spin" />
-          <p className="text-gray-600 text-sm">Connecting to wallet...</p>
-        </div>
-        {connectError && (
-          <div className="text-red-500 text-sm mt-4">
-            {connectError.message}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-
-  // Show loader if connecting, login screen if not connected, or dashboard if connected
-  if (connectLoading) {
-    return loaderView;
-  }
-
+  // Show mobile-first login or dashboard
   if (isConnected) {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col">

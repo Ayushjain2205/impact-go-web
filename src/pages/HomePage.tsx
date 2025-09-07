@@ -327,8 +327,8 @@ export const HomePage: React.FC = () => {
       ? issues
       : issues.filter((issue) => issue.type === activeFilter);
 
-  // Login view for unconnected state
-  const unloggedInView = (
+  // Loader component for loading state
+  const loaderView = (
     <div className="min-h-screen flex flex-col items-center justify-center p-5 relative">
       {/* Main gradient background */}
       <div
@@ -344,10 +344,76 @@ export const HomePage: React.FC = () => {
             <Zap width={32} height={32} color="white" />
           </div>
         </div>
-        <h1 className="text-3xl font-bold font-display text-gray-800 mb-2">
+        <h1
+          className="text-4xl font-display font-bold text-center mb-2 tracking-wider"
+          style={{
+            color: "#1D1033",
+            fontWeight: "800",
+            letterSpacing: "2px",
+            textShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+          }}
+        >
           IMPACT GO
         </h1>
-        <p className="text-gray-600 mb-8">Hunt. Report. Impact.</p>
+        <p
+          className="text-base font-sans text-center tracking-wide mb-8"
+          style={{
+            color: "#64748B",
+            letterSpacing: "1px",
+          }}
+        >
+          Hunt. Report. Impact.
+        </p>
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-8 h-8 text-[var(--color-impact-green)] animate-spin" />
+          <p className="text-gray-600 text-sm">Connecting to wallet...</p>
+        </div>
+        {connectError && (
+          <div className="text-red-500 text-sm mt-4">
+            {connectError.message}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  // Unconnected view with Get Started button
+  const unconnectedView = (
+    <div className="min-h-screen flex flex-col items-center justify-center p-5 relative">
+      {/* Main gradient background */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 50%, #3DDC84 100%)",
+        }}
+      />
+      <div className="text-center relative z-10 w-full max-w-xs">
+        <div className="mb-6">
+          <div className="w-16 h-16 bg-[var(--color-impact-green)] rounded-full flex items-center justify-center mx-auto shadow-lg">
+            <Zap width={32} height={32} color="white" />
+          </div>
+        </div>
+        <h1
+          className="text-4xl font-display font-bold text-center mb-2 tracking-wider"
+          style={{
+            color: "#1D1033",
+            fontWeight: "800",
+            letterSpacing: "2px",
+            textShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          IMPACT GO
+        </h1>
+        <p
+          className="text-base font-sans text-center tracking-wide mb-8"
+          style={{
+            color: "#64748B",
+            letterSpacing: "1px",
+          }}
+        >
+          Hunt. Report. Impact.
+        </p>
         <button
           onClick={() => connect()}
           className="w-full py-4 px-6 bg-[var(--color-impact-green)] text-white rounded-xl text-base font-semibold hover:bg-[var(--color-impact-green-dark)] transition-all hover:-translate-y-0.5 hover:shadow-lg"
@@ -363,9 +429,12 @@ export const HomePage: React.FC = () => {
     </div>
   );
 
-  // Show login screen if not connected
+  // Show loader if connecting, unconnected view if not connected
   if (!isConnected) {
-    return unloggedInView;
+    if (connectLoading) {
+      return loaderView;
+    }
+    return unconnectedView;
   }
 
   return (
