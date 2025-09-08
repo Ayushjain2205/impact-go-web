@@ -16,8 +16,6 @@ export function Balance() {
   );
 
   const fetchBalance = async () => {
-    console.log("accounts", accounts);
-    console.log("connection", connection);
     if (connection && accounts && accounts.length > 0) {
       try {
         setIsLoading(true);

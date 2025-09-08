@@ -552,8 +552,13 @@ export const HomePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Current Location Button - Floating Overlay */}
-      <div className="absolute bottom-24 right-4 z-20">
+      {/* Current Location Button - Floating Overlay with Safe Area */}
+      <div
+        className="absolute right-4 z-20"
+        style={{
+          bottom: "calc(env(safe-area-inset-bottom, 20px) + 100px)",
+        }}
+      >
         <button
           className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-105 hover:shadow-xl text-blue-500"
           onClick={() => {
@@ -601,14 +606,19 @@ export const HomePage: React.FC = () => {
         </button>
       </div>
 
-      {/* Report Issue Button - Floating Overlay */}
-      <div className="absolute bottom-4 right-4 z-20">
+      {/* Report Issue Button - Floating Overlay with Safe Area */}
+      <div
+        className="absolute right-4 z-20"
+        style={{
+          bottom: "calc(env(safe-area-inset-bottom, 20px) + 20px)",
+        }}
+      >
         <button
           onClick={handleOpenReportBottomSheet}
           className="flex items-center gap-2 py-3 px-4 bg-[var(--color-impact-green)] text-white rounded-2xl text-sm font-semibold shadow-lg transition-all hover:bg-[var(--color-impact-green-dark)] hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0"
         >
           <span className="text-lg">📷</span>
-          <span className="text-sm font-semibold">Report Issue </span>
+          <span className="text-sm font-semibold">Report Issue</span>
         </button>
       </div>
 
