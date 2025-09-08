@@ -1,15 +1,23 @@
 import { useSolanaWallet } from "@web3auth/modal/react/solana";
-import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
+import { LAMPORTS_PER_SOL, PublicKey, Connection } from "@solana/web3.js";
 import { useEffect, useState } from "react";
 import { RefreshCw } from "lucide-react";
 
 export function Balance() {
-  const { accounts, connection } = useSolanaWallet();
+  const { accounts } = useSolanaWallet();
   const [balance, setBalance] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Create a custom connection to devnet to avoid 403 errors
+  const connection = new Connection(
+    "https://api.devnet.solana.com",
+    "confirmed"
+  );
+
   const fetchBalance = async () => {
+    console.log("accounts", accounts);
+    console.log("connection", connection);
     if (connection && accounts && accounts.length > 0) {
       try {
         setIsLoading(true);
@@ -19,6 +27,7 @@ export function Balance() {
         setBalance(balance);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unknown error");
+        console.log("error", err);
       } finally {
         setIsLoading(false);
       }
