@@ -552,11 +552,11 @@ export const HomePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Current Location Button - Floating Overlay with Safe Area */}
+      {/* Current Location Button - Left Side */}
       <div
-        className="absolute right-4 z-20"
+        className="absolute left-4 z-20"
         style={{
-          bottom: "calc(env(safe-area-inset-bottom, 20px) + 100px)",
+          bottom: "calc(env(safe-area-inset-bottom, 20px) + 20px)",
         }}
       >
         <button
@@ -606,7 +606,7 @@ export const HomePage: React.FC = () => {
         </button>
       </div>
 
-      {/* Report Issue Button - Floating Overlay with Safe Area */}
+      {/* Report Issue Button - Right Side */}
       <div
         className="absolute right-4 z-20"
         style={{
