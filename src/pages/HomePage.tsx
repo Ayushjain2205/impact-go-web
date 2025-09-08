@@ -556,7 +556,7 @@ export const HomePage: React.FC = () => {
       <div
         className="absolute left-4 z-20"
         style={{
-          bottom: "calc(env(safe-area-inset-bottom, 20px) + 160px)",
+          bottom: "calc(env(safe-area-inset-bottom, 20px) + 100px)",
         }}
       >
         <button
@@ -610,7 +610,7 @@ export const HomePage: React.FC = () => {
       <div
         className="absolute right-4 z-20"
         style={{
-          bottom: "calc(env(safe-area-inset-bottom, 20px) + 160px)",
+          bottom: "calc(env(safe-area-inset-bottom, 20px) + 100px)",
         }}
       >
         <button
