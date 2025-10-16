@@ -1,48 +1,70 @@
-# Web3Auth React Solana Quick Start
+# 🌍 Impact GO
 
-This example demonstrates how to integrate Web3Auth into a React application for the Solana blockchain.
+**Impact GO** is a **gamified civic impact platform** that empowers communities to identify and report real-world issues - like potholes, broken streetlights, waste dumps, or unsafe sidewalks—while earning rewards for their contributions.
 
-## Prerequisites
-- Node.js 20+
-- npm
-- A Web3Auth Client ID (get one from [Web3Auth Dashboard](https://dashboard.web3auth.io))
+👉 **Try the live app here:** [impact-go.netlify.app](http://impact-go.netlify.app)
 
-## Quick Start
+Inspired by the gameplay of _Pokémon GO_ and the values of _ReFi (Regenerative Finance)_, Impact GO transforms everyday civic challenges into **impact quests**. By blending **fun, rewards, and transparency**, it motivates people to improve their neighborhoods while creating an open and verifiable **impact ledger** .
 
-### 1. Clone the repository
-```bash
-git clone https://github.com/Web3Auth/web3auth-examples.git
-```
+---
 
-### 2. Navigate to the example
-```bash
-cd web3auth-examples/quick-starts/react-solana-quick-start
-```
+## 🚧 The Problem
 
-### 3. Install dependencies
-```bash
-npm install
-```
+Cities around the world face constant challenges in maintaining infrastructure and public spaces.
 
-### 4. Configure environment variables
-Create a `.env` file and add your Web3Auth Client ID:
-```bash
-VITE_WEB3AUTH_CLIENT_ID=YOUR_WEB3AUTH_CLIENT_ID
-```
+- Reporting systems are often **slow, bureaucratic, and opaque**.
+- Citizens lack **incentives** to report issues.
+- Data is siloed—governments, NGOs, and communities can’t **collaborate effectively**.
 
-### 5. Run the application
-```bash
-npm run dev
-```
+As a result, **small problems become big problems**, eroding community trust and quality of life.
 
-Visit `http://localhost:5173` in your browser to see the application running.
+---
 
-## 📚 Resources
+## ✅ The Solution
 
-- [Web3Auth Documentation](https://web3auth.io/docs)
-- [SDK References](https://web3auth.io/docs/sdk)
-- [Developer Dashboard](https://dashboard.web3auth.io)
-- [Web3Auth Community](https://web3auth.io/community)
+Impact GO turns civic duty into a **game that pays back**:
 
-## License
-MIT
+1. **Snap & Tag** – Users take a photo of an issue and pin it to the map.
+2. **Verify Together** – Other users confirm the issue for authenticity.
+3. **Earn Rewards** – Validated reports mint an **NFT certificate** , while users earn **$IMPACT tokens**.
+4. **Community Recognition** – Leaderboards, squads, and badges highlight contributions.
+5. **Open Data** – All issues become part of a public, transparent impact ledger accessible to NGOs, local governments, and communities.
+
+---
+
+## 🔑 Key Features
+
+- **Impact Quests** – Report potholes, hazards, or broken infrastructure by snapping and tagging them on the map.
+- **Eco-Themed Map** – A clean, environment-focused map theme highlights parks, water, and green zones while minimizing clutter.
+- **Gamified Rewards** – Earn $IMPACT tokens + NFT proof-of-impact for verified submissions.
+- **Verification Layer** – Reports only unlock rewards after peer validation.
+- **Seamless Onboarding** – MetaMask Embedded Wallets (via Web3Auth) enable email/social login for non-crypto natives.
+- **Leaderboards & Badges** – Track your contributions and earn recognition in your city or globally.
+- **Squads (Civic Clans)** – Users can form or join squads to act together, compete on leaderboards, and unlock squad badges.
+
+---
+
+## 🪙 Tokenomics
+
+- **Token:** $IMPACT (SPL Token on Somnia).
+- **Distribution:** Reporter = 70%, Verifiers = 30%.
+- **Anti-Spam:** Reporters stake tokens; fake reports lose stake, verified ones get rewards.
+- **Utility:** Reputation (leaderboards), governance (vote on issue priorities), mintable NFT badges, and future redemption with partners/NGOs.
+
+---
+
+## 👥 Community Aspect
+
+Impact GO encourages collaboration through **peer verification**, **leaderboards**, and **squads**—civic clans where users join forces to report and validate issues together. This transforms individual action into **collective community impact**.
+
+---
+
+## 🚀 Future Potential
+
+- **Integration with municipalities/NGOs** → forward reports to civic bodies.
+- **Quadratic Funding** → communities pool tokens to prioritize urgent fixes.
+- **Corporate Sponsorships** → local businesses sponsor bounty pools.
+- **AI-Powered Verification** → detect issue type automatically from photos.
+- **Squad DAOs** → squads evolve into micro-DAOs managing their own bounty pools.
+
+👉 **Try the live app here:** [impact-go.netlify.app](http://impact-go.netlify.app)
